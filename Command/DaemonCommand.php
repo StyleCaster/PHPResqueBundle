@@ -1,16 +1,14 @@
 <?php
 namespace PHPResqueBundle\Command;
 
-use PHPResqueBundle\PHPResqueBundle;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-
-class DaemonCommand extends Command {
-
+class DaemonCommand extends ContainerAwareCommand
+{
     protected function configure() {
         $this->setName('resque:worker')
              ->setDescription("Starts Resque worker to read queues. Use resque:worker --help for + info")
@@ -24,9 +22,9 @@ You can run more than one queue per time. In this case input all queues names se
 EOF
 );
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $phpresque = new PHPResqueBundle();
+        $phpresque = $this->getContainer()->get('phpresque.control');
         $phpresque->defineQueue($input->getArgument('queue'));
         $phpresque->verbose($input->getOption('log'));
         $phpresque->setInterval($input->getOption('interval'));

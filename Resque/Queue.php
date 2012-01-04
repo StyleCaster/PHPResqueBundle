@@ -1,22 +1,26 @@
 <?php
 namespace PHPResqueBundle\Resque;
 
-require_once dirname(__FILE__) . '/../vendor/php-resque/lib/Resque.php';
-
 class Queue {
 
+    private $backend = '';
+
+    public function __construct($backend) {
+        $this->backend = $backend;
+    }
+
     public static function add($job_name, $queue_name, $args = array()) {
-        \Resque::setBackend('127.0.0.1:6379');
-        
+        \Resque::setBackend($this->backend);
+
         if (strpos($queue_name, ':') !== false) {
             list($namespace, $queue_name) = explode(':', $queue_name);
             \Resque_Redis::prefix($namespace);
         }
-        
+
         try {
-            $klass = new \ReflectionClass($job_name);
-            $jobId = \Resque::enqueue($queue_name, $klass->getName(), $args, true);
-            
+            $class = new \ReflectionClass($job_name);
+            $jobId = \Resque::enqueue($queue_name, $class->getName(), $args, true);
+
             return $jobId;
         } catch (\ReflectionException $rfe) {
             throw new \RuntimeException($rfe->getMessage());

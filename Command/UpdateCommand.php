@@ -1,17 +1,16 @@
 <?php
 namespace PHPResqueBundle\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-
 use PHPResqueBundle\Resque\Status;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-class UpdateCommand extends Command {
-    
+class UpdateCommand extends ContainerAwareCommand
+{
     protected function configure() {
         $this->setName('resque:update')
              ->setDescription('Update a Job status')
@@ -21,16 +20,15 @@ class UpdateCommand extends Command {
              ->setHelp("Set a new status to a Job.");
     }
 
-    
     protected function execute(InputInterface $input, OutputInterface $output) {
         try {
             if (Status::update($input->getArgument('new_status'), $input->getArgument('job_id'), $input->getOption('namespace'))) {
-                $output->write("Job updated !");
+                $output->write("Job updated!");
             } else {
                 throw new \RuntimeException("Job could NOT updated.");
             }
-        } catch (\RuntimeException $rue) {
-            $output->write("ERROR while update job: {$rue->getMessage()}");
+        } catch (\RuntimeException $e) {
+            $output->write("ERROR while update job: {$e->getMessage()}");
         }
     }
 }

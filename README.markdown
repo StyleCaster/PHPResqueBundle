@@ -5,39 +5,9 @@ PHPResqueBundle is an derivation of php-resque project <https://github.com/chris
 This bundle supports all features from php-resque project. It's includes: workers, enqueues, fork workers, events, namespaces, etc.
 
 ## Install ##
-  Add the following lines below into your `deps` file:
+  This project uses the composer project to install dependencies. <https://github.com/composer/composer>
+  Look in the composer.json file to install the dependencies required.
 
-    [PHPResqueBundle]
-       git=http://github.com/hlegius/PHPResqueBundle.git
-       target=/PHPResqueBundle
-            
-    [php-resque]
-       git=http://github.com/chrisboulton/php-resque.git
-       target=/PHPResqueBundle/vendor/php-resque
-
-  Now, run:
-
-        $ php bin/vendors install
-    
-  If you have trouble running this, try with --reinstall
-  NOTE that this will download ALL your vendors again !
-        
-        $ php bin/vendors install --reinstall
-
-
-### Configuration ###
-    
-  Open file app/AppKernel.php:
-  Into your `$bundles` array, put at end of array:
-    
-        new PHPResqueBundle\PHPResqueBundle(),
-        
-  Open your app/autoload.php and register the namespace:
-    
-        'PHPResqueBundle'           => __DIR__.'/../vendor/',
-    
-  That's it. :)
-    
 ## How it works ##
 ### Worker ###
    

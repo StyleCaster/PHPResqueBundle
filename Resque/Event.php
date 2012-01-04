@@ -27,7 +27,7 @@ class Event {
         }
     }
     
-    public static function tigger($event, $data = null) {
+    public static function trigger($event, $data = null) {
         \Resque_Event::trigger($event, $data);
     } 
     

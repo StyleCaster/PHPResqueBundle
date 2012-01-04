@@ -1,17 +1,16 @@
 <?php
 namespace PHPResqueBundle\Command;
 
-use Symfony\Component\Console\Input\InputOption;
-
 use PHPResqueBundle\Resque\Status;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-class StatusCommand extends Command {
-    
+class StatusCommand extends ContainerAwareCommand
+{
     protected function configure() {
         $this->setName('resque:status')
              ->setDescription('Check Job status')
@@ -25,4 +24,3 @@ class StatusCommand extends Command {
         $output->write($status);
     }
 }
-

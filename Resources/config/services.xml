@@ -14,13 +14,9 @@
         <service id="phpresque.control" class="%phpresque.control.class%">
             <argument>%phpresque.backend%</argument>
         </service>
-    </services>
-    <services>
         <service id="phpresque.queue" class="%phpresque.queue.class%">
             <argument>%phpresque.backend%</argument>
         </service>
-    </services>
-    <services>
         <service id="phpresque.event" class="%phpresque.event.class%">
             <argument>%phpresque.backend%</argument>
         </service>

@@ -9,7 +9,7 @@ class Queue {
         $this->backend = $backend;
     }
 
-    public static function add($job_name, $queue_name, $args = array()) {
+    public function add($job_name, $queue_name, $args = array()) {
         \Resque::setBackend($this->backend);
 
         if (strpos($queue_name, ':') !== false) {

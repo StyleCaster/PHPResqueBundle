@@ -3,18 +3,16 @@ namespace PHPResqueBundle\Resque;
 
 class Status {
 
-    private $backend = '';
+    private $control;
 
-    public function __construct($backend) {
-        $this->backend = $backend;
+    public function __construct($control) 
+    {
+        $this->control = $control;
     }
 
-    public static function check($job_id, $namespace) {
-        \Resque::setBackend($this->backend);
-        
-        if (!empty($namespace)) {
-            \Resque_Redis::prefix($namespace);
-        }
+    public static function check($job_id, $namespace) 
+    {
+        $this->control->setup($namespace);
 
         $status = new \Resque_Job_Status($job_id);
         if (!$status->isTracking()) {
@@ -32,12 +30,9 @@ class Status {
         return 'Job status in queue is ' . $status->get() . " [$constant_name]";
     }
 
-    public static function update($status, $to_job_id, $namespace) {
-        \Resque::setBackend($this->backend);
-
-        if (!empty($namespace)) {
-            \Resque_Redis::prefix($namespace);
-        }
+    public static function update($status, $to_job_id, $namespace) 
+    {
+        $this->control->setup($namespace);
 
         $job = new \Resque_Job_Status($to_job_id);
 

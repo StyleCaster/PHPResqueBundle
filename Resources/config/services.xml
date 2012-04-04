@@ -7,18 +7,20 @@
     <parameters>
         <parameter key="phpresque.control.class">PHPResqueBundle\PHPResque</parameter>
         <parameter key="phpresque.queue.class">PHPResqueBundle\Resque\Queue</parameter>
-        <parameter key="phpresque.event.class">PHPResqueBundle\Resque\Event</parameter>
+        <parameter key="phpresque.status.class">PHPResqueBundle\Resque\Status</parameter>
+        <parameter key="phpresque.password" />
     </parameters>
 
     <services>
         <service id="phpresque.control" class="%phpresque.control.class%">
             <argument>%phpresque.backend%</argument>
+            <argument>%phpresque.password%</argument>
         </service>
         <service id="phpresque.queue" class="%phpresque.queue.class%">
-            <argument>%phpresque.backend%</argument>
+            <argument type="service" id="phpresque.control" />
         </service>
-        <service id="phpresque.event" class="%phpresque.event.class%">
-            <argument>%phpresque.backend%</argument>
+        <service id="phpresque.status" class="%phpresque.status.class%">
+            <argument type="service" id="phpresque.control" />
         </service>
     </services>
 </container>

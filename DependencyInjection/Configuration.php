@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('backend')->defaultValue('127.0.0.1:6379')->end()
+                ->scalarNode('password')->end()
             ->end();
 
         return $treeBuilder;

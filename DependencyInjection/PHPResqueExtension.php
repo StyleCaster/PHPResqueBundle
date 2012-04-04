@@ -31,6 +31,10 @@ class PHPResqueExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         $container->setParameter('phpresque.backend', $config['backend']);
+        
+        if (isset($config['password'])) {
+            $container->setParameter('phpresque.password', $config['password']);
+        }
     }
 
     public function getAlias()

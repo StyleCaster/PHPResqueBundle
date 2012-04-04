@@ -8,9 +8,11 @@ class PHPResque
     private $checker_interval = 5;
     private $fork_count = 1;
     private $backend = '';
+    private $password = '';
 
-    public function __construct($backend) {
+    public function __construct($backend, $password) {
         $this->backend = $backend;
+        $this->password = $password;
     }
 
     public function defineQueue($name) {
@@ -49,7 +51,7 @@ class PHPResque
             case 'verbose' :
                 return \Resque_Worker::LOG_VERBOSE;
             case 'normal' :
-                return \Resque_Worker::LOG_NONE;
+                return \Resque_Worker::LOG_NORMAL;
             default :
                 return \Resque_Worker::LOG_NONE;
         }
@@ -63,13 +65,14 @@ class PHPResque
     }
 
     public function daemon() {
-        \Resque::setBackend($this->backend);
+        $namespace = null;
 
         if (strpos($this->queue, ':') !== false) {
             list($namespace, $queue) = explode(':', $this->queue);
-            \Resque_Redis::prefix($namespace);
             $this->queue = $queue;
         }
+
+        $this->setup($namespace);
 
         if ($this->getForkInstances() > 1) {
             for ($i = 0; $i < $this->getForkInstances(); ++$i) {
@@ -84,6 +87,19 @@ class PHPResque
             }
         } else {
             $this->work();
+        }
+    }
+    
+    public function setup($namespace = null)
+    { 
+        \Resque::setBackend($this->backend);
+
+        if (isset($this->password)) {
+            \Resque::redis()->auth($this->password);
+        }
+        
+        if (isset($namespace)) {
+            \Resque_Redis::prefix($namespace);
         }
     }
 }

@@ -3,19 +3,21 @@ namespace PHPResqueBundle\Resque;
 
 class Queue {
 
-    private $backend = '';
+    private $control;
 
-    public function __construct($backend) {
-        $this->backend = $backend;
+    public function __construct($control) 
+    {
+        $this->control = $control;
     }
 
-    public function add($job_name, $queue_name, $args = array()) {
-        \Resque::setBackend($this->backend);
-
+    public function add($job_name, $queue_name, $args = array()) 
+    {
+        $namespace = null;
         if (strpos($queue_name, ':') !== false) {
             list($namespace, $queue_name) = explode(':', $queue_name);
-            \Resque_Redis::prefix($namespace);
         }
+        
+        $this->control->setup($namespace);
 
         try {
             $class = new \ReflectionClass($job_name);
